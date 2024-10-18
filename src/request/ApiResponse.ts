@@ -13,6 +13,9 @@ const apiRequest = async <T>(
   headers?: Record<string, string> // 추가 헤더
 ): Promise<ApiResponse<T>> => {
   try {
+    const baseUrl = "http://localhost:8080";
+    url = baseUrl + url;
+
     const config: AxiosRequestConfig = {
       method,
       url,

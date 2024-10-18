@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { QInput, QSelect, QDialog, QDate, QIcon } from 'quasar';
 
 interface DropdownOption {
@@ -12,9 +12,14 @@ const props = defineProps<{
   prependText: string;
   isDropdown: boolean;
   dropdownOptions?: DropdownOption[];
-  size: string;
   isDisabled: boolean;
   isDate: boolean;
+  classSet?: string;
+  inputType: 'number' | 'text' | 'search' | 'textarea' | 'time' | 'password' | 'email' | 'tel' | 'file' | 'url' | 'date' | 'datetime-local' | undefined
+  inputValue: {
+    type: string | number
+    default: undefined;
+  }
 }>();
 
 const inputValue = ref<string | number | null>(null);
@@ -38,16 +43,22 @@ const onDateSelect = (date: string) => {
   inputValue.value = date;
   showCalendar.value = false;
 };
+
+watchEffect(() => {
+  console.log(inputValue.value);
+})
+
 </script>
 
 <template>
   <q-input
     v-if="!isDropdown && !isDate"
     v-model="inputValue"
+    :type="inputType"
+    :class="classSet"
     :label="label"
     :disable="isDisabled"
     :style="inputStyle"
-    :size="size"
     outlined
     autofocus>
     <template v-slot:prepend>
@@ -61,7 +72,6 @@ const onDateSelect = (date: string) => {
     :options="dropdownOptions"
     :disable="isDisabled"
     :label="label"
-    :size="size"
     outlined
   >
     <template v-slot:prepend>
@@ -75,7 +85,6 @@ const onDateSelect = (date: string) => {
     :label="label"
     :disable="true"
     :style="inputStyle"
-    :size="size"
     outlined
     autofocus>
     <template v-slot:prepend>
