@@ -1,1 +1,33 @@
 // app global css in SCSS form
+.half-width {
+  max-width: 50%;
+}
+
+.buttonStyle-orange {
+  background-color: #FFA500;
+  color: #FFFFFF;
+};
+
+.buttonStyle-primary {
+  background-color: #1976D2;
+  color: #FFFFFF;
+};
+
+.button-container {
+  display: flex;
+  flex-direction: column; /* 세로로 배치 */
+  align-items: center;    /* 수평 중앙 정렬 */
+  justify-content: center; /* 수직 중앙 정렬 */
+  gap: 0.3vw;             /* 버튼 간 간격 */
+}
+
+.button-container>.inner-button {
+  gap:0.3vw;
+}
+
+.dialog-input {
+  width: 90%;
+  height: 50%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
