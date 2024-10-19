@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref, watchEffect } from 'vue';
 import ButtonComponent from 'components/ButtonComponent.vue';
-import apiResponse from 'src/request/ApiResponse';
+import apiResponse from 'components/util/request/ApiResponse';
 import FindAdminId from 'pages/find/admin/info/FindAdminIdPage.vue';
+import { confirmMessage } from 'components/util/Common';
+import ResettingPasscodeAuthPage from 'pages/find/admin/info/ResettingPasscodeAuthPage.vue';
 
 // 로그인
 const loginInfo = reactive({
@@ -20,8 +22,15 @@ const clickOpenFindIdDialog = () => {
 const clickCloseFindIdDialog = () => {
   isClickFindId.value = false;
 }
+
 // PW 찾기
 const isClickPassword = ref(false);
+const clickOpenFindPwDialog = () => {
+  isClickPassword.value = true
+}
+const clickCloseFindPwDialog = () => {
+  isClickPassword.value = false
+}
 
 const clickLogin = async () => {
   try {
@@ -42,14 +51,6 @@ const clickLogin = async () => {
   } catch (error) {
     console.log("error: " + error);
   }
-}
-
-const clickResetMemberPasscode = () => {
-  isClickPassword.value = true
-}
-
-const isDialogCancel = () => {
-  if (isSuccessLogin.value) isSuccessLogin.value = false;
 }
 
 const checkAuthNumber = async () => {
@@ -80,11 +81,16 @@ const checkAuthNumber = async () => {
   }
 }
 
+const isDialogCancel = () => {
+  if (confirm(confirmMessage)) {
+    if (isSuccessLogin.value) isSuccessLogin.value = false;
+  }
+}
+
 watchEffect(() => {
   if (!isSuccessLogin.value) {
     code.value = ''
   }
-
 })
 
 </script>
@@ -146,13 +152,13 @@ watchEffect(() => {
             size="md"
             text="비밀번호 재설정"
             color="primary"
-            @click="clickResetMemberPasscode"
+            @click="clickOpenFindPwDialog"
           />
         </div>
       </div>
     </div>
     <!-- 인증 팝업 다이어로그 -->
-    <q-dialog v-model="isSuccessLogin">
+    <q-dialog v-model="isSuccessLogin" persistent>
       <q-card style="width: 20%; height: 25%;">
         <q-card-section>
           관리자 인증
@@ -190,6 +196,9 @@ watchEffect(() => {
     />
 
     <!-- TODO PW 초기화 다이어로그 -->
-
+    <ResettingPasscodeAuthPage
+      :isOpen="isClickPassword"
+      @close="clickCloseFindPwDialog"
+    />
   </div>
 </template>
