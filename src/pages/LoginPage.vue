@@ -2,7 +2,7 @@
 import { reactive, ref, watchEffect } from 'vue';
 import ButtonComponent from 'components/ButtonComponent.vue';
 import apiResponse from 'src/request/ApiResponse';
-import FindAdminId from 'pages/FindAdminId.vue';
+import FindAdminId from 'pages/find/admin/info/FindAdminIdPage.vue';
 
 // 로그인
 const loginInfo = reactive({
@@ -21,17 +21,7 @@ const clickCloseFindIdDialog = () => {
   isClickFindId.value = false;
 }
 // PW 찾기
-const findPwDto = reactive({
-  userId: '',
-  passcode: '',
-  passcodeCheck: '',
-  userName: '',
-  code: '',
-  tellNumber: ''
-});
 const isClickPassword = ref(false);
-const isCheckSmsPw = ref(false);
-const isSuccessPwCheck = ref(false);
 
 const clickLogin = async () => {
   try {
@@ -60,8 +50,6 @@ const clickResetMemberPasscode = () => {
 
 const isDialogCancel = () => {
   if (isSuccessLogin.value) isSuccessLogin.value = false;
-  if (isClickFindId.value) isClickFindId.value = false;
-  if (isClickPassword.value) isClickPassword.value = false;
 }
 
 const checkAuthNumber = async () => {
@@ -97,14 +85,6 @@ watchEffect(() => {
     code.value = ''
   }
 
-  if (!isClickPassword.value) {
-    findPwDto.userId = ''
-    findPwDto.passcode = ''
-    findPwDto.passcodeCheck = ''
-    findPwDto.userName = ''
-    findPwDto.code = ''
-    findPwDto.tellNumber = ''
-  }
 })
 
 </script>
@@ -203,94 +183,13 @@ watchEffect(() => {
       </q-card>
     </q-dialog>
 
-    <!-- 다이어로그 -->
+    <!-- ID 찾기 다이어로그 -->
     <FindAdminId
       :isOpen="isClickFindId"
       @close="clickCloseFindIdDialog"
     />
 
     <!-- TODO PW 초기화 다이어로그 -->
-<!--    <q-dialog v-model="isClickPassword">-->
-<!--      <q-card style="width: 25%; height: 51%;">-->
-<!--        <q-card-section>-->
-<!--          관리자 비밀번호 초기화-->
-<!--        </q-card-section>-->
-<!--        <q-card-section>-->
-<!--          <q-input-->
-<!--            class="dialog-input col-10 q-mb-sm"-->
-<!--            v-model="findPwDto.userId"-->
-<!--            type="text"-->
-<!--            label="ID"-->
-<!--            outlined-->
-<!--            autofocus-->
-<!--          >-->
-<!--          </q-input>-->
 
-<!--          <q-input-->
-<!--            class="dialog-input col-10 q-mb-sm"-->
-<!--            v-model="findPwDto.userName"-->
-<!--            type="text"-->
-<!--            label="이름"-->
-<!--            outlined-->
-<!--            autofocus-->
-<!--          >-->
-<!--          </q-input>-->
-
-<!--          <q-input-->
-<!--            class="dialog-input col-10 q-mb-sm"-->
-<!--            v-model="findPwDto.tellNumber"-->
-<!--            type="tel"-->
-<!--            label="전화번호"-->
-<!--            outlined-->
-<!--            autofocus-->
-<!--          >-->
-<!--            <template v-slot:append>-->
-<!--              <ButtonComponent-->
-<!--                size="md"-->
-<!--                text="인증번호 전송"-->
-<!--                color="orange"-->
-<!--                @click="checkAuthNumber"-->
-<!--              />-->
-<!--            </template>-->
-<!--          </q-input>-->
-
-<!--          <q-input-->
-<!--            class="dialog-input col-10"-->
-<!--            v-model="findPwDto.code"-->
-<!--            type="tel"-->
-<!--            label="인증번호"-->
-<!--            outlined-->
-<!--            autofocus-->
-<!--          >-->
-<!--            <template v-slot:append>-->
-<!--              <ButtonComponent-->
-<!--                size="md"-->
-<!--                text="인증번호 확인"-->
-<!--                color="orange"-->
-<!--                @click="checkSms"-->
-<!--              />-->
-<!--            </template>-->
-<!--          </q-input>-->
-<!--        </q-card-section>-->
-<!--        <div class="row" style="margin-left: 40%;">-->
-<!--          <div>-->
-<!--            <ButtonComponent-->
-<!--              size="md"-->
-<!--              text="창닫기"-->
-<!--              color="primary"-->
-<!--              @click="isDialogCancel"-->
-<!--            />-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </q-card>-->
-<!--    </q-dialog>-->
-    <!-- PW 초기화 다이어로그 -->
-
-    <!-- TODO PW 재설정 -->
-    <q-dialog v-if="isCheckSmsPw">
-
-    </q-dialog>
-    <!-- PW 재설정 -->
   </div>
 </template>
